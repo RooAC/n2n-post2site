@@ -4,11 +4,13 @@
 
 # n2n-post2site
 
-Local MCP bridge for AI-assisted website publishing.
+Give your AI client a draft, review, and publish workflow for your website.
 
 > **Draft with AI. Publish with intent.**
 
-n2n-post2site lets an AI IDE client talk to a protected website content API without exposing a database, filesystem, shell, deployment process, payments, or account administration. It is a thin stdio MCP server: validate tool input, map it to HTTP, and return the backend response.
+n2n-post2site connects an MCP client to your website’s publishing API. The assistant reads your content rules, prepares a draft, checks it with your backend, and publishes only after you explicitly confirm. Your website keeps ownership of its content model, storage, and publication rules.
+
+Start with the included in-memory backend to try the complete workflow without connecting a real site. For a Laravel site, add the companion backend package and an adapter for your own content model. This project is a stdio MCP bridge, not a hosted CMS or a website generator.
 
 ## Architecture
 
@@ -37,50 +39,63 @@ The intended authoring loop is:
 
 The MCP server does not define blog fields such as `type`, `topics`, `geo_tags`, `seo_keywords`, or `locales`. Those live inside the host-declared `content_payload` object and are validated by the backend.
 
-## Quick Start
+## Quick Start: Try a Local Draft
 
-Requirements:
+Use Node.js 24 for this walkthrough (the package runtime supports Node.js 22+), npm, and Git. In a terminal:
 
-- Node.js 22+
-- An MCP-capable IDE/client
-- A backend implementing the Post2Site publishing HTTP contract
-- A content API key
-
-Using npm:
-
-```json
-{
-  "mcpServers": {
-    "n2n-post2site": {
-      "command": "npx",
-      "args": ["-y", "n2n-post2site"],
-      "env": {
-        "CONTENT_API_BASE_URL": "https://your-site.com/api/v1/mcp",
-        "CONTENT_API_KEY": "your-api-key"
-      }
-    }
-  }
-}
+```bash
+git clone https://github.com/n2ns/n2n-post2site.git
+cd n2n-post2site
+npm ci
+npm run build
+API_KEY=demo-key PORT=8787 node examples/mock-backend/server.mjs
 ```
 
-Using a local checkout:
+Keep that terminal running. In another terminal, check the backend:
+
+```bash
+curl --fail-with-body -H 'X-API-KEY: demo-key' http://127.0.0.1:8787/capabilities
+```
+
+Expect JSON with `contract: "post2site-publishing"` and `host_profile: "mock-backend"`.
+
+For clients that accept a JSON `mcpServers` configuration, add the following entry. Replace the absolute path with your checkout’s `dist/index.js`; the client must run `node` in the same environment as that file and reach the backend at the configured URL.
 
 ```json
 {
   "mcpServers": {
     "n2n-post2site": {
       "command": "node",
-      "args": ["/path/to/n2n-post2site/dist/index.js"],
+      "args": ["/absolute/path/to/n2n-post2site/dist/index.js"],
       "env": {
-        "CONTENT_API_BASE_URL": "https://your-site.com/api/v1/mcp",
-        "CONTENT_API_KEY": "your-api-key"
+        "CONTENT_API_BASE_URL": "http://127.0.0.1:8787",
+        "CONTENT_API_KEY": "demo-key"
       }
     }
   }
 }
 ```
 
-`CONTENT_API_BASE_URL` should point at the protected publishing API base, for example `https://your-site.example/api/v1/mcp`. Keep the API key out of prompts, screenshots, and article content.
+Other clients use their own configuration syntax; transfer the command, arguments, and environment values rather than pasting this JSON unchanged. Restart or reconnect the configured MCP server in your client.
+
+**Continue with [Your first publish](./docs/first-publish.md)** for exact resource reads, tool arguments, expected responses, and the confirmation step. The mock only changes in-memory data: it does not publish a website, and its preview/public URLs are examples without rendered pages. Stop it with Ctrl+C when finished; restarting resets the data.
+
+## Connect Your Own Website
+
+For Laravel, follow the [Laravel first-publish guide](https://github.com/n2ns/laravel-post2site/blob/main/docs/first-publish.md). It covers installing the backend and binding the adapter that maps the publishing contract to your content model. For another framework, implement the [Backend API Contract](./docs/BACKEND_API.md).
+
+Once the backend is ready, set `CONTENT_API_BASE_URL` to its protected API base, such as `https://your-site.example/api/v1/mcp`, and set `CONTENT_API_KEY` to its content API key. The local mock uses the root URL; Laravel’s default includes `/api/v1/mcp`. Keep real keys out of prompts, screenshots, and article content.
+
+You can keep the local checkout configuration above, or use the published npm package by replacing the command and arguments with:
+
+```json
+{
+  "command": "npx",
+  "args": ["-y", "n2n-post2site"]
+}
+```
+
+Keep the two environment values in the client’s server entry. The first `npx` launch needs access to the npm registry. A real publication also needs your backend’s preview, storage, and public rendering implementation; the MCP bridge does not provide those.
 
 ## MCP Resources
 
@@ -148,6 +163,7 @@ npm run check
 
 ## Related Docs
 
+- [Your First Publish](./docs/first-publish.md)
 - [Backend API Contract](./docs/BACKEND_API.md)
 - [Architecture](./docs/ARCHITECTURE.md)
 - [Resources Reference](./docs/RESOURCES_REFERENCE.md)

@@ -2,7 +2,7 @@
 
 This document covers smoke testing the local MCP server surface after the clean Tool/Resource refactor.
 
-Supported target clients:
+Client verification targets (not a record of completed GUI tests):
 
 - Claude Code
 - Codex
@@ -38,20 +38,22 @@ This is the required automated smoke before checking individual clients.
 
 Use a local backend during client smoke. The protocol smoke script starts its own backend, but GUI/CLI clients need a backend that stays running while the client is open.
 
-Example server entry:
+Start the persistent mock from the repository root as described in [Your first publish](./first-publish.md). The protocol smoke fixture exits when its script finishes; it cannot serve a separate client session.
+
+Example server entry for clients that accept this JSON shape (other clients require their own configuration syntax):
 
 ```json
 {
   "command": "node",
-  "args": ["/home/deploy/_projects/_workspace/n2n-post2site/dist/index.js"],
+  "args": ["/absolute/path/to/n2n-post2site/dist/index.js"],
   "env": {
-    "CONTENT_API_BASE_URL": "http://127.0.0.1:PORT",
-    "CONTENT_API_KEY": "smoke-key"
+    "CONTENT_API_BASE_URL": "http://127.0.0.1:8787",
+    "CONTENT_API_KEY": "demo-key"
   }
 }
 ```
 
-Replace `PORT` with the local mock or staging backend port.
+Replace the executable path with your built checkout and adjust the port/key if you changed the demo settings. Keep the backend running until you finish client checks. The bridge command is stdio; the HTTP URL is its backend API, not a remote MCP transport URL.
 
 ## Claude Code
 
