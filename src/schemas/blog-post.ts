@@ -4,8 +4,8 @@ export const emptySchema = z.object({});
 export const draftModeSchema = z.enum(['create', 'update_existing']);
 export const validationModeSchema = z.enum(['draft', 'publish']);
 
-const contentPayloadSchema = z.record(z.unknown()).describe('Host-defined JSON object. Read post2site://capabilities before shaping it.');
-const clientMetadataSchema = z.record(z.unknown()).optional().describe('Optional non-secret client metadata for backend attribution.');
+const contentPayloadSchema = z.record(z.string(), z.unknown()).describe('Host-defined JSON object. Read post2site://capabilities before shaping it.');
+const clientMetadataSchema = z.record(z.string(), z.unknown()).optional().describe('Optional non-secret client metadata for backend attribution.');
 
 export const listInventorySchema = z.object({
   target_identifier: z.string().optional().describe('Optional host target identifier, usually a slug.'),
@@ -76,7 +76,7 @@ export const uploadAssetSchema = z.object({
   filename: z.string().min(1).describe('Original filename for the selected asset.'),
   content_type: z.string().min(1).describe('MIME type, for example image/webp.'),
   data_base64: z.string().min(1).describe('Base64 encoded selected asset bytes. Upload only the selected image.'),
-  metadata: z.record(z.unknown()).optional().describe('Optional asset metadata such as alt text or provenance.'),
+  metadata: z.record(z.string(), z.unknown()).optional().describe('Optional asset metadata such as alt text or provenance.'),
 });
 
 export const publishDraftSchema = z.object({
