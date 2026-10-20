@@ -2,6 +2,17 @@
 
 All notable changes to N2N Post2Site are documented in this file.
 
+## [0.4.0] - 2026-10-20
+
+### Added
+
+- `n2n_list_inventory` and `n2n_list_drafts` accept `cursor`, so callers can pass a returned `next_cursor` to read the next page. Previously the cursor was dropped and later pages were unreachable.
+- Added a first-publish walkthrough and clearer setup instructions for the mock backend and MCP clients.
+
+### Changed
+
+- Updated dependencies to current compatible stable versions.
+
 ## [0.3.0] - 2026-07-02
 
 ### Changed
