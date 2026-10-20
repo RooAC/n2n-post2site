@@ -2,7 +2,7 @@
 
 All notable changes to N2N Post2Site are documented in this file.
 
-## [0.4.0] - 2026-10-20
+## [0.3.1] - 2026-10-20
 
 ### Added
 

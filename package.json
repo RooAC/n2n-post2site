@@ -1,6 +1,6 @@
 {
   "name": "n2n-post2site",
-  "version": "0.4.0",
+  "version": "0.3.1",
   "description": "AI-assisted website content publishing MCP server.",
   "repository": {
     "type": "git",
