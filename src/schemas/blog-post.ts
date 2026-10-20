@@ -48,6 +48,7 @@ export const validateWorkingDraftSchema = z.object({
 export const listDraftsSchema = z.object({
   status: z.string().optional().describe('Optional draft status filter, for example draft or published.'),
   per_page: z.number().int().min(1).max(100).optional().describe('Maximum result count.'),
+  cursor: z.string().optional().describe('next_cursor from the previous page; omit for the first page.'),
 });
 
 export const createDraftSchema = draftArticleSchema;

@@ -73,6 +73,8 @@ List saved server drafts. Returned items include `resource_uri` when they can be
 }
 ```
 
+Pass the returned `next_cursor` as `cursor` to read the next page; it is `null` on the last page.
+
 ### `n2n_create_draft`
 
 Create a server draft after the working draft is confirmed for remote saving. The response includes the canonical draft resource URI.

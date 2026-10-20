@@ -73,4 +73,8 @@ describe('MCP publishing schemas', () => {
   it('keeps the inventory pagination cursor returned as next_cursor', () => {
     expect(listInventorySchema.parse({ per_page: 1, cursor: '1' })).toEqual({ per_page: 1, cursor: '1' });
   });
+
+  it('keeps the draft list pagination cursor returned as next_cursor', () => {
+    expect(listDraftsSchema.parse({ per_page: 1, cursor: 'draft_01' })).toEqual({ per_page: 1, cursor: 'draft_01' });
+  });
 });

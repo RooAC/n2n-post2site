@@ -48,6 +48,8 @@ GET   /drafts/{draft_id}/preview
 POST  /drafts/{draft_id}/publish
 ```
 
+`GET /inventory/resources` and `GET /drafts` return `next_cursor`. The bridge forwards a caller's `cursor` query parameter unchanged; return `null` on the last page.
+
 Assets:
 
 ```http
