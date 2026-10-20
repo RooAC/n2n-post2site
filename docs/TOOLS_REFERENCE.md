@@ -19,6 +19,8 @@ List existing content before drafting. Returned items include `resource_uri` whe
 }
 ```
 
+Pass the returned `next_cursor` as `cursor` to read the next page; it is `null` on the last page.
+
 ### `n2n_check_duplicates`
 
 Check duplicate risk for proposed host content.

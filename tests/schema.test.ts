@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   createDraftSchema,
+  listDraftsSchema,
+  listInventorySchema,
   publishDraftSchema,
   uploadAssetSchema,
   validateWorkingDraftSchema,
@@ -66,5 +68,9 @@ describe('MCP publishing schemas', () => {
     });
 
     expect(parsed.purpose).toBe('blog_thumbnail');
+  });
+
+  it('keeps the inventory pagination cursor returned as next_cursor', () => {
+    expect(listInventorySchema.parse({ per_page: 1, cursor: '1' })).toEqual({ per_page: 1, cursor: '1' });
   });
 });

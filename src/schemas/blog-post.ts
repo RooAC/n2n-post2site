@@ -14,6 +14,7 @@ export const listInventorySchema = z.object({
   topic: z.string().optional().describe('Optional host-defined topic filter.'),
   q: z.string().optional().describe('Optional search query.'),
   per_page: z.number().int().min(1).max(100).optional().describe('Maximum result count.'),
+  cursor: z.string().optional().describe('next_cursor from the previous page; omit for the first page.'),
 });
 
 export const getInventoryResourceSchema = z.object({
