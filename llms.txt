@@ -53,4 +53,4 @@ n2n-post2site connects an AI IDE client to a protected website publishing API. I
 
 Package: `n2n-post2site`
 Repository: `https://github.com/n2ns/n2n-post2site`
-License: MIT
+License: Apache-2.0
